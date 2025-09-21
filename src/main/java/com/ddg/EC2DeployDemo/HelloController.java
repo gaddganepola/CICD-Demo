@@ -12,4 +12,9 @@ public class HelloController {
     public ResponseEntity<String> hello() {
         return new ResponseEntity<>("Hello from EC2", HttpStatus.OK);
     }
+
+    @GetMapping("/bye")
+    public ResponseEntity<String> bye() {
+        return new ResponseEntity<>("Bye from EC2", HttpStatus.OK);
+    }
 }
