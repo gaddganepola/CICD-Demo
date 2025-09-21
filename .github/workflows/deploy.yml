@@ -30,8 +30,8 @@ jobs:
           port: 22
           source: "target/EC2DeployDemo-0.0.1-SNAPSHOT.jar"
           target: "/home/ec2-user/"
-      
-      - name: Run App on EC2
+
+      - name: Deploy and Restart Service on EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -39,8 +39,30 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ec2-user
-            pkill -f 'EC2DeployDemo-0.0.1-SNAPSHOT' || true
             chmod +x EC2DeployDemo-0.0.1-SNAPSHOT.jar
-            nohup java -jar EC2DeployDemo-0.0.1-SNAPSHOT.jar > output.log 2>&1 < /dev/null &
-    
 
+            # Stop the service if it exists
+            if systemctl list-units --full -all | grep -Fq "ec2deploydemo.service"; then
+              sudo systemctl stop ec2deploydemo.service
+            fi
+
+            # Create systemd service file
+            echo "[Unit]
+Description=Spring Boot Demo App
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user
+ExecStart=/usr/bin/java -jar /home/ec2-user/EC2DeployDemo-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/ec2deploydemo.service
+
+            # Reload systemd, enable and start the service
+            sudo systemctl daemon-reload
+            sudo systemctl enable ec2deploydemo.service
+            sudo systemctl restart ec2deploydemo.service
