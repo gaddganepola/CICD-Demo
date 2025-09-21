@@ -41,6 +41,6 @@ jobs:
             cd /home/ec2-user
             pkill -f 'EC2DeployDemo-0.0.1-SNAPSHOT' || true
             chmod +x EC2DeployDemo-0.0.1-SNAPSHOT.jar
-            nohup java -jar EC2DeployDemo-0.0.1-SNAPSHOT.jar > output.log 2>&1 &
+            nohup java -jar EC2DeployDemo-0.0.1-SNAPSHOT.jar > output.log 2>&1 < /dev/null &
     
 
