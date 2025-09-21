@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: 22
           source: "target/EC2DeployDemo-0.0.1-SNAPSHOT.jar"
-          target: "/home/ec2-user/EC2DeployDemo-0.0.1-SNAPSHOT.jar"
+          target: "/home/ec2-user/"
       
       - name: Run App on EC2
         uses: appleboy/ssh-action@v0.1.6
