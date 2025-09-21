@@ -2,7 +2,7 @@ name: Spring Boot Demo CI/CD
 
 on:
   push:
-    branches: ["master]
+    branches: ["master"]
 
 Jobs:
   build:
