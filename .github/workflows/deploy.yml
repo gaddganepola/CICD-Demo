@@ -48,19 +48,19 @@ jobs:
 
             # Create systemd service file
             echo "[Unit]
-Description=Spring Boot Demo App
-After=network.target
-
-[Service]
-User=ec2-user
-WorkingDirectory=/home/ec2-user
-ExecStart=/usr/bin/java -jar /home/ec2-user/EC2DeployDemo-0.0.1-SNAPSHOT.jar
-SuccessExitStatus=143
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target" | sudo tee /etc/systemd/system/ec2deploydemo.service
+            Description=Spring Boot Demo App
+            After=network.target
+            
+            [Service]
+            User=ec2-user
+            WorkingDirectory=/home/ec2-user
+            ExecStart=/usr/bin/java -jar /home/ec2-user/EC2DeployDemo-0.0.1-SNAPSHOT.jar
+            SuccessExitStatus=143
+            Restart=always
+            RestartSec=10
+            
+            [Install]
+            WantedBy=multi-user.target" | sudo tee /etc/systemd/system/ec2deploydemo.service
 
             # Reload systemd, enable and start the service
             sudo systemctl daemon-reload
