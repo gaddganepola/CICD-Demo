@@ -39,6 +39,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ec2-user
+
+            # Ensure the JAR is executable
             chmod +x EC2DeployDemo-0.0.1-SNAPSHOT.jar
 
             # Stop the service if it exists
@@ -50,7 +52,7 @@ jobs:
             echo "[Unit]
             Description=Spring Boot Demo App
             After=network.target
-            
+
             [Service]
             User=ec2-user
             WorkingDirectory=/home/ec2-user
@@ -58,11 +60,11 @@ jobs:
             SuccessExitStatus=143
             Restart=always
             RestartSec=10
-            
+
             [Install]
             WantedBy=multi-user.target" | sudo tee /etc/systemd/system/ec2deploydemo.service
 
-            # Reload systemd, enable and start the service
+            # Reload systemd, enable and restart the service
             sudo systemctl daemon-reload
             sudo systemctl enable ec2deploydemo.service
             sudo systemctl restart ec2deploydemo.service
